@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Horas Nocturnas — 2025 (Solo lectura)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Rubik:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin:0; font-family:Inter, sans-serif; background:#071534; color:#f1f6ff;
+    }
+    .container{max-width:1200px; margin:36px auto; padding:0 20px;}
+    .topbar{display:flex; gap:14px; align-items:center;}
+    .logo-wrap{width:68px;height:68px;display:grid;place-items:center;background:#fff;border-radius:16px}
+    .logo-wrap img{width:56px;height:56px;object-fit:contain}
+    .brand h1{margin:0;font-weight:800;font-size:28px}
+    .brand .sub{color:#8ea2bd;font-size:13px;margin-top:4px}
+    .chips{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+    .chip{background:#0f2347;border:1px solid #123058;padding:6px 10px;border-radius:999px;font-size:12px}
+    .controls{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}
+    .select,.btn,.search{background:#0f2347;border:1px solid #123058;border-radius:12px;padding:10px 12px;color:#f1f6ff}
+    select{appearance:none;background:transparent;color:inherit;border:0;font-size:14px}
+    .btn{cursor:pointer}
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:18px}
+    .card{background:#0e1c3b;border:1px solid #123058;border-radius:18px;box-shadow:0 10px 35px rgba(0,0,0,.45)}
+    .card .title{padding:18px;color:#8ea2bd;font-size:12px;text-transform:uppercase}
+    .table{padding:12px}
+    .thead,.row{display:grid;grid-template-columns:50px 1.5fr 2.5fr 160px 120px;gap:8px;padding:10px;border-bottom:1px solid #123058}
+    .thead{color:#8ea2bd;font-size:12px;text-transform:uppercase}
+    .rank{color:#a9b9d3}
+    .bar{height:10px;background:#0a1d3a;border:1px solid #123058;border-radius:999px;position:relative;overflow:hidden}
+    .bar>i{position:absolute;inset:0 100% 0 0;background:linear-gradient(90deg,#c51d7a,#0072ce,#00a3e0)}
+    .stat{padding:18px}
+    .stat h4{margin:0 0 8px;color:#8ea2bd;font-size:12px;text-transform:uppercase}
+    .stat .value{font-size:28px;font-weight:800}
+    .footer{padding:12px 18px;color:#8ea2bd;font-size:12px}
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="topbar">
+    <div class="logo-wrap"><img src="logo.png" alt="logo"></div>
+    <div class="brand">
+      <h1>Horas Nocturnas — 2025</h1>
+      <div class="sub">Carga automática desde <code>todo.csv</code></div>
+      <div class="chips">
+        <span class="chip">22:00 → 08:00</span>
+        <span class="chip">Turno fijo 8h</span>
+        <span class="chip">:01 → 00</span>
+        <span class="chip">Sin letras</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="select"><select id="monthSelect"></select></div>
+    <button id="toggleAll" class="btn">Todo 2025</button>
+    <div class="search"><input id="searchInput" placeholder="Buscar empleado…"></div>
+    <button class="btn" id="toggleCard">Ranking tarjeta</button>
+  </div>
+
+  <div id="viewTable">
+    <div class="grid">
+      <section class="card">
+        <div class="title">Distribución por empleado</div>
+        <div class="table">
+          <div class="thead"><div>#</div><div>Empleado</div><div>Distribución</div><div>Horas Nocturnas</div><div>%</div></div>
+          <div id="rows"></div>
+        </div>
+        <div class="footer" id="footerNote"></div>
+      </section>
+      <aside class="right">
+        <div class="card stat"><h4>Total empleados</h4><div class="value" id="statCount">–</div></div>
+        <div class="card stat"><h4>Promedio</h4><div class="value" id="statAvg">–</div></div>
+        <div class="card stat"><h4>Máximo</h4><div class="value" id="statMax">–</div></div>
+        <div class="card stat"><h4>Mínimo</h4><div class="value" id="statMin">–</div></div>
+      </aside>
+    </div>
+  </div>
+
+  <div id="viewCards" style="display:none">
+    <section class="card"><div class="note" id="cardsNote">Top 3</div></section>
+    <div id="cardsGrid" class="grid-months"></div>
+  </div>
+</div>
+
+<script>
+// Aquí va el mismo JS de antes, pero SIN input file.
+// Se autoload "todo.csv" desde el mismo folder que index.html
+(async function(){
+  try {
+    const resp = await fetch('todo.csv');
+    if (!resp.ok) throw 0;
+    const text = await resp.text();
+    // TODO: parsear CSV y renderizar igual que en las otras versiones
+    document.getElementById('rows').innerHTML = '<div>CSV cargado: ' + text.length + ' caracteres</div>';
+  } catch(e) {
+    document.getElementById('rows').innerHTML = '<div>No se pudo cargar todo.csv</div>';
+  }
+})();
+</script>
+</body>
+</html>
